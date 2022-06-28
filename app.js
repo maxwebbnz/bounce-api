@@ -75,7 +75,7 @@ app.listen(PORT, () => {
 
 const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize('bouncenz', 'api', 'alanmaxwilsonlovebounCe.1', {
-    host: '45.77.236.119',
+    host: '104.248.156.41',
     dialect: 'mysql'
 }
 );
