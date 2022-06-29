@@ -7,14 +7,14 @@ const cors = require("cors");
 const app = express();
 const bodyParser = require('body-parser');
 
-var corsOptions = {
-    origin: "http://localhost:8081"
-};
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: '*'
+}));
 // parse requests of content-type - application/json
 app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
@@ -56,7 +56,7 @@ async function readAllUsers(req, res) {
         limit: 10,
         order: [['id', 'DESC']]
     }).then(users => {
-        return res.status(200).json({
+        return res.json({
             users
         })
     }).catch(err => {
