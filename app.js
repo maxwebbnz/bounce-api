@@ -5,10 +5,14 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const bodyParser = require('body-parser');
 
 var corsOptions = {
     origin: "http://localhost:8081"
 };
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
@@ -20,45 +24,102 @@ app.get("/", (req, res) => {
     res.json({ message: "Welcome to bezkoder application." });
 });
 
+/**==============================================
+ *?                Routes
+ *=============================================**/
+app.get('/users', readAllUsers);
+app.get('/users/:uid', readAUser);
+app.post('/users/create', createAUser)
+app.put('/users/update/:uid', updateAUser)
+/**==============================================
+ **              readAUser
+ *?  What does it do? Reads a user in the application, registered
+ *@return http response
+ *=============================================**/
+async function readAUser(req, res) {
+    let id = req.params.uid
+    User.findByPk(id)
+        .then((user) => {
+            return res.status(200).json({ user })
+        }).catch(err => {
+            return res.status(400).json({ err })
+        })
+}
 
-app.get('/user', (req, res) => {
-    return res.send('Received a GET HTTP method');
-});
+/**==============================================
+ **              readAllUsers
+ *?  What does it do? Reads all users in the application, registered
+ *@return http response
+ *=============================================**/
+async function readAllUsers(req, res) {
+    User.findAll({
+        limit: 10,
+        order: [['id', 'DESC']]
+    }).then(users => {
+        return res.status(200).json({
+            users
+        })
+    }).catch(err => {
+        return res.status(400).json({ err })
+    })
+}
 
-app.post('/users/:userId', (req, res) => {
-    // undefined, body parser ignored this request
-    // because of the content-type header
-    req.body;
-    res.json(req.body); // echo the result back
-});
+/**==============================================
+ **              createAUser
+ *?  What does it do? Reads all users in the application, registered
+ *@return http response
+ *=============================================**/
+async function createAUser(req, res) {
+    let { name, email, age } = req.body
+    let newUser = {
+        name,
+        email,
+        age
+    }
+    User.create(newUser).then((user) => {
+        return res.status(201).json({
+            "message": "User created successfully",
+            user
+        })
+    }).catch(err => {
+        return res.status(400).json({ err })
+    })
+}
+async function updateAUser(req, res) {
+    let { name, email, age } = req.body
+    let id = req.params.uid
+    let userDataToChange = {
+        name,
+        email,
+        age
+    }
+    User.findOne({
+        where: { id: id }
+    }).then(user => {
+        if (user) {
+            user.update(userDataToChange)
+                .then((updateUser) => {
+                    return res.status(202).json({
+                        "message": "User updated successfully",
+                        updateUser
+                    })
+                })
+        } else {
+            return res.status(206).json({
+                "message": "User not found"
+            })
+        }
+    }).catch(error => {
+        return res.status(400).json({
+            "error": error
+        })
+    })
+}
 
-app.delete('/users/:userId', (req, res) => {
-    return res.send(
-        `DELETE HTTP method on user/${req.params.userId} resource`,
-    );
-});
 
-
-app.post('/user', (req, res) => {
-    return res.send('Received a POST HTTP method');
-});
-
-app.get("/createuser", (req, res) => {
-    const newUser = User.build({
-        name: "Max Webb",
-        age: 18,
-        email: "18205mw@hvhs.school.nz",
-        verifedAge: true,
-
-    });
-    newUser.save();
-    console.log('Jane was saved to the database!');
-
-    res.json({ message: "Welcome to bezkoder application." });
-});
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8010;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
     try {
