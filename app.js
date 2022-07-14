@@ -16,6 +16,7 @@
 /**=======================
  *     Base Declerations
  *========================**/
+const devMode = true
 //* express
 const express = require("express");
 //* CORS for
@@ -51,6 +52,7 @@ app.get("/", (req, res) => {
 app.get('/users', readAllUsers);
 app.get('/users/:uid', readAUser);
 app.post('/users/create', createAUser)
+
 app.put('/users/update/:uid', updateAUser)
 
 //?locations
@@ -58,6 +60,25 @@ app.get('/locations', readAllLocations)
 app.get('/locations/:id', readALocation)
 app.post('/locations/create', createALocation)
 app.put('/locations/update/:id', updateALocation)
+
+//? development toolkit
+app.post('/dev/deleteAll', function (req, res) {
+    if (devMode) {
+        User.destroy({
+            where: {},
+            truncate: true
+        })
+        Location.destroy({
+            where: {},
+            truncate: true
+        })
+    } else {
+        res.send.json({
+            message: 'Feature not enabled'
+        })
+    }
+
+})
 
 /**==============================================
  **              readAUser
@@ -266,10 +287,10 @@ app.listen(PORT, () => {
         console.log('Connection has been established successfully.');
         User.sync();
         Location.sync();
-        User.hasMany(Location, {
-            foreignKey: 'locationId'
-        });
-        Location.belongsTo(User);
+        // User.hasMany(Location, {
+        //     foreignKey: 'locationId'
+        // });
+        // Location.belongsTo(User);
 
     } catch (error) {
         console.error('Unable to connect to the database:', error);
@@ -299,6 +320,7 @@ const User = sequelize.define("User", {
     },
     verifedAge: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false
     },
     profileImage: {
         type: Sequelize.STRING,
@@ -318,6 +340,7 @@ const Location = sequelize.define("Location", {
     // 'A store in the mall that sells mufins'
     description: {
         type: Sequelize.STRING,
+        defaultValue: ''
     },
     // '41.0004'
     long: {
