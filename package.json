@@ -2,6 +2,7 @@
   "dependencies": {
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.18",
@@ -9,5 +10,8 @@
   },
   "scripts": {
     "start": "nodemon app.js"
+  },
+  "devDependencies": {
+    "jest": "^28.1.3"
   }
 }
