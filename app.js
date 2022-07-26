@@ -12,6 +12,7 @@
  * ?                        node app.js
  * SOF
  *========================================================================**/
+require('dotenv').config();
 
 /**=======================
  *     Base Declerations
@@ -305,9 +306,9 @@ app.listen(PORT, () => {
 //* Database
 
 const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('bouncenz', 'api', 'alanmaxwilsonlovebounCe.1', {
-    host: '104.248.156.41',
-    dialect: 'mysql'
+const sequelize = new Sequelize(process.env.database, process.env.username, process.env.password, {
+    host: process.env.host,
+    dialect: 'mysql',
 }
 );
 const User = sequelize.define("User", {
