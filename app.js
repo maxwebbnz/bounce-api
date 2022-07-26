@@ -42,7 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // simple route
 app.get("/", (req, res) => {
-    res.json({ message: "Bounce API - Welcome." });
+    res.json({ message: "Bounce API NZ - Welcome." });
 });
 
 /**==============================================
