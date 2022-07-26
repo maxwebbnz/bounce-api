@@ -52,7 +52,6 @@ app.get("/", (req, res) => {
 app.get('/users', readAllUsers);
 app.get('/users/:uid', readAUser);
 app.post('/users/create', createAUser)
-
 app.put('/users/update/:uid', updateAUser)
 
 //?locations
@@ -160,9 +159,15 @@ async function updateAUser(req, res) {
                     })
                 })
         } else {
-            return res.status(206).json({
-                "message": "User not found"
+            User.create(userDataToChange).then((user) => {
+                return res.status(201).json({
+                    "message": "User created successfully",
+                    user
+                })
+            }).catch(err => {
+                return res.status(400).json({ err })
             })
+
         }
     }).catch(error => {
         return res.status(400).json({
@@ -331,7 +336,19 @@ const User = sequelize.define("User", {
     eventsCreated: {
         type: Sequelize.INTEGER,
     },
-});
+    phoneNumber: {
+        type: Sequelize.STRING
+    }
+}, {
+    indexes: [
+        {
+            unique: true,
+            fields: ['phoneNumber']
+        }
+    ]
+})
+
+
 const Location = sequelize.define("Location", {
     // i.e. 'Muffin Break'
     name: {
