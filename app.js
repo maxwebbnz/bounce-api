@@ -72,6 +72,9 @@ app.post('/dev/deleteAll', function (req, res) {
             where: {},
             truncate: true
         })
+        res.send.json({
+            message: 'Truncated all data'
+        })
     } else {
         res.send.json({
             message: 'Feature not enabled'
