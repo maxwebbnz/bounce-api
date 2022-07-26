@@ -346,13 +346,6 @@ const User = sequelize.define("User", {
     phoneNumber: {
         type: Sequelize.STRING
     }
-}, {
-    indexes: [
-        {
-            unique: true,
-            fields: ['phoneNumber']
-        }
-    ]
 })
 
 
