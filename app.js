@@ -297,6 +297,7 @@ app.listen(PORT, () => {
         //     foreignKey: 'locationId'
         // });
         // Location.belongsTo(User);
+        User.hasMany(Location)
 
     } catch (error) {
         console.error('Unable to connect to the database:', error);
