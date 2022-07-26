@@ -345,9 +345,6 @@ const User = sequelize.define("User", {
     },
     eventsCreated: {
         type: Sequelize.INTEGER,
-    },
-    phoneNumber: {
-        type: Sequelize.STRING
     }
 })
 
