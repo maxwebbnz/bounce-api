@@ -72,9 +72,8 @@ app.post('/dev/deleteAll', function (req, res) {
             where: {},
             truncate: true
         })
-        res.send.json({
-            message: 'Truncated all data'
-        })
+        return res.status(200).json({ message: "Truncated all data" })
+
     } else {
         res.send.json({
             message: 'Feature not enabled'
@@ -300,7 +299,7 @@ app.listen(PORT, () => {
         //     foreignKey: 'locationId'
         // });
         // Location.belongsTo(User);
-        User.hasMany(Location)
+        // User.hasMany(Location)
 
     } catch (error) {
         console.error('Unable to connect to the database:', error);
@@ -330,8 +329,8 @@ const User = sequelize.define("User", {
     email: {
         type: Sequelize.STRING,
     },
-    profileType: {
-        type: Sequelize.INTEGER,
+    keywords: {
+        type: Sequelize.JSON,
     },
     verifedAge: {
         type: Sequelize.BOOLEAN,
